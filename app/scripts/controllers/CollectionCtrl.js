@@ -7,3 +7,4 @@
         .module('blocJams')
         .controller('CollectionCtrl', CollectionCtrl);
 })();
+//
