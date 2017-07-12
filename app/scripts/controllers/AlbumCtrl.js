@@ -1,6 +1,6 @@
 (function() {
-    function AlbumCtrl () {
-        this.albumData = {
+    function AlbumCtrl (Fixtures) {
+        this.albumData = Fixtures.getAlbum();
             title: 'The Colors',
             artist: 'Pablo Picasso',
             label: 'Cubism',
@@ -18,5 +18,5 @@
     
     angular
         .module('blocJams')
-        .controller('AlbumCtrl', AlbumCtrl);
+        .controller('AlbumCtrl', ['Fixtures', AlbumCtrl]);
 })();
