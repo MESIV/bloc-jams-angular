@@ -1,5 +1,5 @@
 (function() {
-    function SongPlayer(Fixtures) {
+    function SongPlayer($rootScope, Fixtures) {
         
         var SongPlayer = {};
         var currentAlbum = Fixtures.getAlbum();
@@ -16,6 +16,14 @@
 //        @desc Current song object set to null when page loads
 //        @type {Object}
         SongPlayer.currentSong = null;
+        
+//        @desc Current song time set in seconds
+//        @type {Number}        
+        SongPlayer.currentTime = null;
+        
+//        @desc Current song volume set from 0-100 (real quick)
+//        @type {Number}
+        SongPlayer.volume = 75;
         
 
 //        @desc Buzz object audio file
@@ -34,6 +42,15 @@
             currentBuzzObject = new buzz.sound(song.audioUrl, {
                 formats: ['mp3'],
                 preload: true
+            });
+            
+            currentBuzzObject.bind('timeupdate', function() {
+                $rootScope.$apply(function() {
+                    SongPlayer.currentTime = currentBuzzObject.getTime();
+                    if (currentBuzzObject.isEnded()) {
+                        SongPlayer.next();
+                    }
+                });
             });
             
             currentSong = song;
@@ -113,7 +130,19 @@
                 setSong(song);
                 playSong(song);
         }
-    };
+    }
+        
+        SongPlayer.setCurrentTime = function(time) {
+            if (currentBuzzObject) {
+                currentBuzzObject.setTime(time);
+            }
+        };
+        
+        SongPlayer.setVolume = function(volume) {
+            if (currentBuzzObject) {
+                currentBuzzObject.setVolume(volume);
+            }
+        }
         
         return SongPlayer;
 }
